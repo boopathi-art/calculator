@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumCalc - Advanced Scientific & Multi-Functional Calculator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="calculator-app" id="app">
+        <!-- Application Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">QuantumCalc</span>
+            </div>
+
+            <!-- Mode Selector Nav -->
+            <nav class="mode-nav">
+                <button class="nav-btn active" data-mode="standard" title="Standard Mode">Standard</button>
+                <button class="nav-btn" data-mode="scientific" title="Scientific Mode">Scientific</button>
+                <button class="nav-btn" data-mode="converter" title="Unit Converter">Converter</button>
+            </nav>
+
+            <div class="header-actions">
+                <button id="angleToggleBtn" class="pill-btn angle-badge" title="Toggle Radians/Degrees" style="display: none;">DEG</button>
+                <button id="historyToggleBtn" class="icon-btn" title="Calculation History" aria-label="Toggle History">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </button>
+                <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme" aria-label="Toggle Light/Dark Theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Body Wrapper -->
+        <main class="app-content">
+
+            <!-- CALCULATOR VIEW (Standard & Scientific) -->
+            <section class="calculator-view" id="calcView">
+                <!-- Dual-Line Glass Display -->
+                <div class="display-card" id="displayCard" title="Click to copy result">
+                    <div class="display-top-bar">
+                        <span class="memory-badge" id="memoryBadge" style="display: none;">M</span>
+                        <span class="angle-indicator" id="angleIndicator">DEG</span>
+                        <span class="copy-toast" id="copyToast">Copied!</span>
+                    </div>
+                    <div class="expression-line" id="expressionDisplay"></div>
+                    <div class="result-line" id="resultDisplay">0</div>
+                </div>
+
+                <!-- Memory Operations Bar -->
+                <div class="memory-bar">
+                    <button class="mem-btn" data-action="mc">MC</button>
+                    <button class="mem-btn" data-action="mr">MR</button>
+                    <button class="mem-btn" data-action="m-plus">M+</button>
+                    <button class="mem-btn" data-action="m-minus">M-</button>
+                    <button class="mem-btn" data-action="ms">MS</button>
+                </div>
+
+                <!-- Scientific Controls Grid (Collapsed in Standard, Visible in Scientific) -->
+                <div class="scientific-keypad" id="scientificKeypad">
+                    <button class="sci-btn" data-action="func" data-val="sin">sin</button>
+                    <button class="sci-btn" data-action="func" data-val="cos">cos</button>
+                    <button class="sci-btn" data-action="func" data-val="tan">tan</button>
+                    <button class="sci-btn" data-action="func" data-val="ln">ln</button>
+                    <button class="sci-btn" data-action="func" data-val="log">log</button>
+
+                    <button class="sci-btn" data-action="op" data-val="^">xʸ</button>
+                    <button class="sci-btn" data-action="func" data-val="sqrt">√x</button>
+                    <button class="sci-btn" data-action="action-sq">x²</button>
+                    <button class="sci-btn" data-action="action-recip">1/x</button>
+                    <button class="sci-btn" data-action="func" data-val="fact">n!</button>
+
+                    <button class="sci-btn" data-action="insert" data-val="(">(</button>
+                    <button class="sci-btn" data-action="insert" data-val=")">)</button>
+                    <button class="sci-btn" data-action="insert" data-val="π">π</button>
+                    <button class="sci-btn" data-action="insert" data-val="e">e</button>
+                    <button class="sci-btn" data-action="action-toggle-sign">±</button>
+                </div>
+
+                <!-- Main Standard Keypad Grid -->
+                <div class="keypad">
+                    <button class="btn btn-clear" data-action="clear-all">AC</button>
+                    <button class="btn btn-clear" data-action="clear-entry">CE</button>
+                    <button class="btn btn-action" data-action="backspace" title="Backspace">⌫</button>
+                    <button class="btn btn-op" data-action="op" data-val="÷">÷</button>
+
+                    <button class="btn btn-num" data-val="7">7</button>
+                    <button class="btn btn-num" data-val="8">8</button>
+                    <button class="btn btn-num" data-val="9">9</button>
+                    <button class="btn btn-op" data-action="op" data-val="×">×</button>
+
+                    <button class="btn btn-num" data-val="4">4</button>
+                    <button class="btn btn-num" data-val="5">5</button>
+                    <button class="btn btn-num" data-val="6">6</button>
+                    <button class="btn btn-op" data-action="op" data-val="-">−</button>
+
+                    <button class="btn btn-num" data-val="1">1</button>
+                    <button class="btn btn-num" data-val="2">2</button>
+                    <button class="btn btn-num" data-val="3">3</button>
+                    <button class="btn btn-op" data-action="op" data-val="+">+</button>
+
+                    <button class="btn btn-action" data-action="action-toggle-sign">±</button>
+                    <button class="btn btn-num" data-val="0">0</button>
+                    <button class="btn btn-num" data-val=".">.</button>
+                    <button class="btn btn-equals" data-action="equals">=</button>
+                </div>
+            </section>
+
+            <!-- UNIT CONVERTER VIEW -->
+            <section class="converter-view" id="converterView" style="display: none;">
+                <div class="converter-card">
+                    <h2 class="section-title">Unit Converter</h2>
+                    
+                    <!-- Category Selector Tabs -->
+                    <div class="converter-categories" id="converterCategories">
+                        <button class="cat-btn active" data-cat="length">Length</button>
+                        <button class="cat-btn" data-cat="weight">Weight</button>
+                        <button class="cat-btn" data-cat="temperature">Temp</button>
+                        <button class="cat-btn" data-cat="area">Area</button>
+                        <button class="cat-btn" data-cat="speed">Speed</button>
+                    </div>
+
+                    <!-- Input / Output Fields -->
+                    <div class="converter-form">
+                        <div class="convert-group">
+                            <label for="convertFromInput">From</label>
+                            <div class="convert-input-wrapper">
+                                <input type="number" id="convertFromInput" value="1" placeholder="Enter value">
+                                <select id="convertFromUnit"></select>
+                            </div>
+                        </div>
+
+                        <button id="swapUnitsBtn" class="swap-btn" title="Swap Units">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"/>
+                            </svg>
+                        </button>
+
+                        <div class="convert-group">
+                            <label for="convertToInput">To</label>
+                            <div class="convert-input-wrapper">
+                                <input type="text" id="convertToInput" readonly placeholder="Result">
+                                <select id="convertToUnit"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="formula-preview" id="formulaPreview">
+                        1 Meter = 100 Centimeters
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORY SIDE DRAWER -->
+            <aside class="history-drawer" id="historyDrawer">
+                <div class="drawer-header">
+                    <h3>Calculation History</h3>
+                    <div class="drawer-header-actions">
+                        <button id="clearHistoryBtn" class="text-btn" title="Clear History">Clear</button>
+                        <button id="closeHistoryBtn" class="icon-btn-sm" title="Close Drawer">&times;</button>
+                    </div>
+                </div>
+
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <p>No history yet</p>
+                        <span>Calculations will appear here</span>
+                    </div>
+                </div>
+            </aside>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

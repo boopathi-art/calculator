@@ -1,0 +1,722 @@
+/* ==========================================================================
+   QuantumCalc - Comprehensive Design System & Stylesheet
+   ========================================================================== */
+
+/* Theme Variables */
+:root {
+    /* Base Color Tokens (Dark Theme Default) */
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* Keypad Colors */
+    --key-bg: rgba(255, 255, 255, 0.06);
+    --key-bg-hover: rgba(255, 255, 255, 0.12);
+    --key-bg-active: rgba(255, 255, 255, 0.2);
+    --key-border: rgba(255, 255, 255, 0.08);
+    --key-text: #f1f5f9;
+
+    --key-op-bg: rgba(99, 102, 241, 0.2);
+    --key-op-hover: rgba(99, 102, 241, 0.35);
+    --key-op-text: #818cf8;
+
+    --key-clear-bg: rgba(239, 68, 68, 0.2);
+    --key-clear-hover: rgba(239, 68, 68, 0.35);
+    --key-clear-text: #f87171;
+
+    --key-equals-bg: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --key-equals-hover: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    --key-equals-text: #ffffff;
+    --key-equals-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+
+    --display-bg: rgba(15, 23, 42, 0.6);
+    --display-border: rgba(255, 255, 255, 0.08);
+
+    --accent-glow: rgba(99, 102, 241, 0.3);
+    --badge-bg: rgba(99, 102, 241, 0.15);
+    --badge-text: #a5b4fc;
+}
+
+[data-theme="light"] {
+    --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 50%, #e2e8f0 100%);
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-border: rgba(255, 255, 255, 0.6);
+    --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+
+    --key-bg: #f8fafc;
+    --key-bg-hover: #e2e8f0;
+    --key-bg-active: #cbd5e1;
+    --key-border: #e2e8f0;
+    --key-text: #1e293b;
+
+    --key-op-bg: rgba(99, 102, 241, 0.12);
+    --key-op-hover: rgba(99, 102, 241, 0.22);
+    --key-op-text: #4f46e5;
+
+    --key-clear-bg: rgba(239, 68, 68, 0.12);
+    --key-clear-hover: rgba(239, 68, 68, 0.22);
+    --key-clear-text: #dc2626;
+
+    --key-equals-bg: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    --key-equals-hover: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
+    --key-equals-text: #ffffff;
+    --key-equals-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+
+    --display-bg: rgba(241, 245, 249, 0.9);
+    --display-border: rgba(203, 213, 225, 0.6);
+
+    --accent-glow: rgba(79, 70, 229, 0.2);
+    --badge-bg: rgba(79, 70, 229, 0.1);
+    --badge-text: #4f46e5;
+}
+
+/* Global Reset & Base Setup */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    padding: 20px;
+    transition: background 0.4s ease;
+}
+
+/* Main Calculator Container */
+.calculator-app {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: 28px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+
+.calculator-app.mode-scientific {
+    max-width: 540px;
+}
+
+/* Header Component */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.logo-icon {
+    font-size: 1.2rem;
+}
+
+/* Mode Navigation Pills */
+.mode-nav {
+    display: flex;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 4px;
+    border-radius: 12px;
+    gap: 2px;
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    color: var(--text-primary);
+}
+
+.nav-btn.active {
+    background: var(--key-bg-hover);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn, .pill-btn {
+    border: none;
+    background: var(--key-bg);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--key-border);
+}
+
+.icon-btn:hover, .pill-btn:hover {
+    background: var(--key-bg-hover);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.pill-btn {
+    width: auto;
+    padding: 0 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    border-color: transparent;
+}
+
+/* Main Content Area */
+.app-content {
+    position: relative;
+    padding: 24px;
+}
+
+/* Calculator View Layout */
+.calculator-view {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Display Card */
+.display-card {
+    background: var(--display-bg);
+    border: 1px solid var(--display-border);
+    border-radius: 18px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.display-card:hover {
+    border-color: var(--badge-text);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.display-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 20px;
+}
+
+.memory-badge, .angle-indicator {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    text-transform: uppercase;
+}
+
+.copy-toast {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #10b981;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+}
+
+.copy-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.expression-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-align: right;
+    min-height: 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    margin-top: 4px;
+}
+
+.expression-line::-webkit-scrollbar {
+    display: none;
+}
+
+.result-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: right;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    line-height: 1.2;
+    transition: color 0.2s ease;
+}
+
+.result-line::-webkit-scrollbar {
+    display: none;
+}
+
+/* Memory Bar */
+.memory-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.mem-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mem-btn:hover {
+    color: var(--text-primary);
+    background: var(--key-bg-hover);
+}
+
+/* Scientific Keypad */
+.scientific-keypad {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;
+}
+
+.calculator-app.mode-scientific .scientific-keypad {
+    max-height: 240px;
+    opacity: 1;
+    margin-bottom: 4px;
+}
+
+.sci-btn {
+    height: 44px;
+    border: 1px solid var(--key-border);
+    border-radius: 12px;
+    background: var(--key-bg);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sci-btn:hover {
+    background: var(--key-bg-hover);
+    color: var(--text-primary);
+}
+
+.sci-btn:active {
+    transform: scale(0.94);
+}
+
+/* Main Keypad Grid */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.btn {
+    height: 58px;
+    border: 1px solid var(--key-border);
+    border-radius: 16px;
+    background: var(--key-bg);
+    color: var(--key-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.btn:hover {
+    background: var(--key-bg-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active, .btn.pressed {
+    transform: scale(0.95);
+    background: var(--key-bg-active);
+}
+
+.btn-op {
+    background: var(--key-op-bg);
+    color: var(--key-op-text);
+    border-color: transparent;
+    font-size: 1.4rem;
+}
+
+.btn-op:hover {
+    background: var(--key-op-hover);
+}
+
+.btn-clear {
+    background: var(--key-clear-bg);
+    color: var(--key-clear-text);
+    border-color: transparent;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.btn-clear:hover {
+    background: var(--key-clear-hover);
+}
+
+.btn-equals {
+    background: var(--key-equals-bg);
+    color: var(--key-equals-text);
+    border-color: transparent;
+    box-shadow: var(--key-equals-shadow);
+    font-size: 1.5rem;
+}
+
+.btn-equals:hover {
+    background: var(--key-equals-hover);
+    transform: translateY(-2px);
+}
+
+.btn-action {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+/* Unit Converter View */
+.converter-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.converter-categories {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.converter-categories::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-btn {
+    border: 1px solid var(--key-border);
+    background: var(--key-bg);
+    color: var(--text-secondary);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.cat-btn:hover {
+    background: var(--key-bg-hover);
+    color: var(--text-primary);
+}
+
+.cat-btn.active {
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    border-color: transparent;
+}
+
+.converter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+}
+
+.convert-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.convert-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.convert-input-wrapper {
+    display: flex;
+    background: var(--display-bg);
+    border: 1px solid var(--display-border);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.convert-input-wrapper input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+}
+
+.convert-input-wrapper select {
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+    padding: 0 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    border-left: 1px solid var(--display-border);
+}
+
+.swap-btn {
+    border: 1px solid var(--key-border);
+    background: var(--key-bg);
+    color: var(--text-secondary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.swap-btn:hover {
+    background: var(--key-bg-hover);
+    color: var(--text-primary);
+    transform: rotate(180deg);
+}
+
+.formula-preview {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* History Side Drawer */
+.history-drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 10;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.history-drawer.open {
+    transform: translateX(0);
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.drawer-header h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.drawer-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.text-btn {
+    border: none;
+    background: transparent;
+    color: var(--key-clear-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.text-btn:hover {
+    text-decoration: underline;
+}
+
+.icon-btn-sm {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 4px;
+}
+
+.history-item {
+    background: var(--display-bg);
+    border: 1px solid var(--display-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.history-item:hover {
+    border-color: var(--badge-text);
+    transform: translateX(-2px);
+}
+
+.history-expr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.history-result {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--badge-text);
+}
+
+.history-empty {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.history-empty p {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.history-empty span {
+    font-size: 0.8rem;
+}
+
+/* Animations & Responsive */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    .calculator-app {
+        border-radius: 20px;
+    }
+    .btn {
+        height: 52px;
+        font-size: 1.1rem;
+    }
+    .sci-btn {
+        height: 40px;
+        font-size: 0.75rem;
+    }
+}
