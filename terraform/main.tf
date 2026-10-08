@@ -179,11 +179,11 @@ locals {
     docker stop calculator-container || true
     docker rm calculator-container || true
 
-    # Start calculator container
     docker run -d \
-      --name calculator-container \
-      -p 8085:80 \
-      ghcr.io/boopathi-art/calculator:latest
+  --name calculator-container \
+  --restart unless-stopped \
+  -p 8085:80 \
+  ghcr.io/boopathi-art/calculator:latest
   EOF
 }
 
