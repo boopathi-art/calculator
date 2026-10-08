@@ -167,13 +167,19 @@ locals {
     systemctl enable docker
     systemctl start docker
 
-    docker login ghcr.io -u "${var.github_username}" -p "${var.github_pat}"
+    # Login to GitHub Container Registry
+    echo "${var.github_pat}" | docker login ghcr.io \
+      -u "${var.github_username}" \
+      --password-stdin
 
+    # Pull calculator image from GHCR
     docker pull ghcr.io/boopathi-art/calculator:latest
 
+    # Remove old container if it exists
     docker stop calculator-container || true
     docker rm calculator-container || true
 
+    # Start calculator container
     docker run -d \
       --name calculator-container \
       -p 8085:80 \
